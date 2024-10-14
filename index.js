@@ -1,33 +1,3 @@
-// const express= require("express");
-// const cors= require("cors");
-// const mysql = require("mysql") as any;
-
-// const app =express();
-// app.use(cors());
-
-// const db= mysql.createConnection({
-//     host:"localhost",
-//     user:"root",
-//     password:"",
-//     database:"crud"
-// });
-
-// app.get("/",(req,res)=>{
-//     const sql ="SELECT * FROM usercrud";
-//     db.query(sql,(err,data)=>{
-//         if(err) return res.json("error");
-//         return res.json(data);
-//     })
-//     // res.json("hello");
-// })
-
-// app.listen(8080,()=>{
-//    console.log("running");
-// });
-
-
-
-
 const express = require("express");
 const cors = require("cors");
 const mysql = require('mysql2');
@@ -65,7 +35,63 @@ app.get("/", (req, res) => {
     });
 });
 
+// Create a new record in `usercrud`
+app.post('/create', (req, res) => {
+    const sql = "INSERT INTO usercrud (`name`, `email`) VALUES (?, ?)";
+    const values = [
+        req.body.name,
+        req.body.email
+    ];
+
+    db.query(sql, values, (err, data) => {
+        if (err) {
+            console.error('Error inserting data: ', err);
+            return res.status(500).json({ error: "Failed to insert data" });
+        }
+        return res.json({ message: "Data inserted successfully", data });
+    });
+});
+
+
+app.put('/update/:id', (req, res) => {
+    const sql = "update usercrud set `name`=?,`email`=? where ID=? ";
+    const values = [
+        req.body.name,
+        req.body.email
+    ];
+
+    const id=req.params.id;
+
+    db.query(sql, [...values ,id], (err, data) => {
+        if (err) {
+            console.error('Error inserting data: ', err);
+            return res.status(500).json({ error: "Failed to insert data" });
+        }
+        return res.json({ message: "Data inserted successfully", data });
+    });
+});
+
+
+app.delete('/usercrud/:id', (req, res) => {
+    const sql = "DELETE FROM usercrud WHERE ID = ? ";
+    const id=req.params.id;
+
+    db.query(sql, [id], (err, data) => {
+        if (err) {
+            console.error('Error inserting data: ', err);
+            return res.status(500).json({ error: "Failed to insert data" });
+        }
+        return res.json({ message: "Data inserted successfully", data });
+    });
+});
+
 // Start the server
 app.listen(8080, () => {
     console.log("Server running on port 8080");
 });
+
+
+
+
+
+
