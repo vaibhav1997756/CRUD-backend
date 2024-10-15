@@ -6,12 +6,15 @@ const app = express();
 app.use(cors());
 app.use(express.json()); // To parse JSON bodies in requests
 
+const port = 8080;
+
 // MySQL Database Connection
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "Vaibhav@12345",
-    database: "crud"
+    password: "",
+    database: "crud",
+    port:3307
 });
 
 // Connect to MySQL
@@ -85,8 +88,23 @@ app.delete('/usercrud/:id', (req, res) => {
     });
 });
 
+
+app.get("/read/:id", (req, res) => {
+    const sql = "SELECT * FROM usercrud";
+    const id=req.params.id;
+
+    db.query(sql,[id], (err, data) => {
+        if (err) {
+            console.error('Error fetching data: ', err);
+            return res.status(500).json({ error: "Failed to fetch data" });
+        }
+        return res.json(data);
+    });
+});
+
+
 // Start the server
-app.listen(8080, () => {
+app.listen(port, () => {
     console.log("Server running on port 8080");
 });
 
