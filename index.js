@@ -42,6 +42,7 @@ app.get("/", (req, res) => {
 app.post('/create', (req, res) => {
     const sql = "INSERT INTO usercrud (`name`, `email`) VALUES (?, ?)";
     const values = [
+       
         req.body.name,
         req.body.email
     ];
@@ -89,7 +90,7 @@ app.delete('/usercrud/:id', (req, res) => {
 });
 
 
-app.get("/read/:id", (req, res) => {
+app.get('/read/:id', (req, res) => {
     const sql = "SELECT * FROM usercrud";
     const id=req.params.id;
 
