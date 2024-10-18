@@ -59,7 +59,7 @@ app.post('/create', (req, res) => {
 
 
 app.put('/update/:id', (req, res) => {
-    const sql = "update usercrud set `name`=?,`email`=? `phone`=? where ID=? ";
+    const sql = "UPDATE usercrud SET `name`=?,`email`=? ,`phone`=? WHERE id=? ";
     const values = [
         req.body.name,
         req.body.email,
