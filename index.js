@@ -40,7 +40,7 @@ app.get("/", (req, res) => {
 
 // Create a new record in `usercrud`
 app.post('/create', (req, res) => {
-    const sql = "INSERT INTO usercrud (`name`, `email`,`phone`) VALUES (?, ?,?)";
+    const sql = "INSERT INTO usercrud (`name`, `email`,`phone`,created_at) VALUES (?, ?,?,NOW())";
     const values = [
        
         req.body.name,
@@ -59,7 +59,7 @@ app.post('/create', (req, res) => {
 
 
 app.put('/update/:id', (req, res) => {
-    const sql = "UPDATE usercrud SET `name`=?,`email`=? ,`phone`=? WHERE id=? ";
+    const sql = "UPDATE usercrud SET `name`=?,`email`=? ,`phone`=?,`updated_at`=NOW() WHERE id=? ";
     const values = [
         req.body.name,
         req.body.email,
