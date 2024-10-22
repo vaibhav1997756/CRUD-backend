@@ -18,7 +18,10 @@ const db = mysql.createConnection({
     user: "root",
     password: "",
     database: "crud",
-    port:3307
+    port:3307,
+    waitForConnections: true,
+    connectionLimit: 10,      // Limit the number of connections
+    queueLimit: 0
 });
 
 // Connect to MySQL
@@ -58,6 +61,50 @@ app.post('/create', (req, res) => {
             return res.status(500).json({ error: "Failed to insert data" });
         }
         return res.json({ message: "Data inserted successfully", data });
+    });
+});
+
+
+app.post('/adduser', (req, res) => {
+    const sql = "INSERT INTO login (`username`, `email`,`mobile`,`password`) VALUES (?, ?,?,?)";
+    const values = [
+       
+        req.body.username,
+        req.body.email,
+        req.body.mobile,
+        req.body.password
+
+    ];
+
+    db.query(sql, values, (err, data) => {
+        if (err) {
+            console.error('Error inserting data: ', err);
+            return res.status(500).json({ error: "Failed to insert data" });
+        }
+        return res.json({ message: "Data inserted successfully", data });
+    });
+});
+
+
+app.post('/loginuser', (req, res) => {
+    const sql = "SELECT * FROM login WHERE username = ? AND password = ?";
+    const values = [
+       req.body.username,
+        req.body.password
+    ];
+
+    db.query(sql, values, (err, data) => {
+        if (err) {
+            console.error('Error inserting data: ', err);
+            return res.status(500).json({ error: "Failed to insert data" });
+        }
+        if(data.length > 0){
+            return res.json({Login:true})
+        }
+        else{
+            return res.json({Login:false})
+        }
+       
     });
 });
 
