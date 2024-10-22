@@ -3,10 +3,23 @@ const cors = require("cors");
 const mysql = require('mysql2');
 const multer = require('multer');
 const XLSX = require('xlsx');
+const cookie=require('cookie-parser');
+const session=require('session-parser');
 
 const app = express();
+app.use(cookie());
 app.use(cors());
 app.use(express.json()); // To parse JSON bodies in requests
+
+app.use(session({
+    secret:'secret',
+    resave:false,
+    saveUninitialized:false,
+    cookie:{
+        secure:false,
+        MaxAge:100*60*60*24
+    }
+}))
 
 const port = 8080;
 
