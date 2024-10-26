@@ -4,22 +4,26 @@ const mysql = require('mysql2');
 const multer = require('multer');
 const XLSX = require('xlsx');
 const cookie=require('cookie-parser');
-const session=require('session-parser');
+//const session=require('express-session');
+const bodyParser=require('body-parser');
+
 
 const app = express();
+app.use(bodyParser.json())
 app.use(cookie());
 app.use(cors());
+
 app.use(express.json()); // To parse JSON bodies in requests
 
-app.use(session({
-    secret:'secret',
-    resave:false,
-    saveUninitialized:false,
-    cookie:{
-        secure:false,
-        MaxAge:100*60*60*24
-    }
-}))
+// app.use(session({
+//     secret:'secret',
+//     resave:false,
+//     saveUninitialized:false,
+//     cookie:{
+//         secure:false,
+//         MaxAge:100*60*60*24
+//     }
+// }))
 
 const port = 8080;
 
@@ -57,6 +61,26 @@ app.get("/", (req, res) => {
         return res.json(data);
     });
 });
+
+
+// app.get("/home", (req, res) => {
+//     // const sql = "SELECT * FROM login";
+//     if(req.session.username){
+//         return res.json({valid:true,username:req.session.username})
+//     }
+//     else{
+//         return res.json({valid:false})
+//     }
+
+
+//     // db.query(sql, (err, data) => {
+//     //     if (err) {
+//     //         console.error('Error fetching data: ', err);
+//     //         return res.status(500).json({ error: "Failed to fetch data" });
+//     //     }
+//     //     return res.json(data);
+//     // });
+// });
 
 // Create a new record in `usercrud`
 app.post('/create', (req, res) => {
@@ -112,6 +136,7 @@ app.post('/loginuser', (req, res) => {
             return res.status(500).json({ error: "Failed to insert data" });
         }
         if(data.length > 0){
+            //req.session.username=data[0].username;
             return res.json({Login:true})
         }
         else{
